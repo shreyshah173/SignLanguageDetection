@@ -50,4 +50,9 @@ with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=
     cv2.destroyAllWindows()
 
 # 3 extract keypoints values
-    
+def extract_keypoints(results):
+    pose = np.array([[res.x , res.y ,res.z , res.visibility] for res in results.pose_landmarks.landmark])
+    lh = np.array([[res.x , res.y , res.z] for res in results.left_hand_landmarks.landmark]) if results.left_hand_landmarks else np.zeros(21*3)
+    rh = np.array([[res.x , res.y , res.z] for res in results.right_hand_landmarks.landmark]) if results.right_hand_landmarks else np.zeros(21*3)
+    face = np.array([[res.x , res.y ,res.z] for res in results.face_landmarks.landmark]) if results.face_landmarks else np.zeros(468*3)
+    return np.concatenate([pose , face , lh , rh])
